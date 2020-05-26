@@ -1,0 +1,141 @@
+void setup() {
+
+  pinMode(6,OUTPUT); //output pin for motor left forward
+  pinMode(7,OUTPUT);//output pin for motor left reverse
+  
+  pinMode(8,OUTPUT);//output pin for motor right forward
+  pinMode(9,OUTPUT);//output pin for motor rigth reverse
+  pinMode(10,INPUT);//input from left ir sensor
+  pinMode(11,INPUT);//input from right ir sensor
+  pinMode(12,OUTPUT);
+  pinMode(13,OUTPUT);
+  int t;
+  Serial.begin(9600);
+}
+
+void loop() {
+  int t;
+  int l;
+  int r;
+  l = digitalRead(10);
+  r = digitalRead(11);
+  if(Serial.available()){ //getting the input from bluetooth app
+    t = Serial.read();
+    Serial.println(t);
+  }
+
+  switch(t){
+    case '1':  // calling function for forward direction
+      forward();
+      if(l== HIGH){
+        left_led();
+      }
+      else if(r==HIGH){
+        right_led();
+      }
+      break;
+
+    case '2':  // calling function for right direction
+      right();
+      if(l== HIGH){
+        left_led();
+      }
+      else if(r==HIGH){
+        right_led();
+      }
+      break;
+
+    case '3':   // calling function for left direction
+      left();
+      if(l== HIGH){
+        left_led();
+      }
+      else if(r==HIGH){
+        right_led();
+      }
+      break;
+
+    case '4':  // calling function for backward direction
+      backward();
+      if(l== HIGH){
+        left_led();
+      }
+      else if(r==HIGH){
+        right_led();
+      }
+      break;
+
+    case '5':  // calling function for stopping the car
+      stop_car();
+      if(l== HIGH){
+        left_led();
+      }
+      else if(r==HIGH){
+        right_led();
+      }
+      break;
+
+    
+
+    default:
+      if(l== HIGH){
+          left_led();
+        }
+        else if(r==HIGH){
+          right_led();
+        }
+      break;
+    
+  }
+
+  
+  
+}
+void forward(){ 
+    digitalWrite(6,HIGH);
+    digitalWrite(7,LOW);// function for forward direction
+    digitalWrite(8,HIGH);
+    digitalWrite(9,LOW);
+  }
+
+  void backward(){ 
+    digitalWrite(6,LOW);//function for reverse direction
+    digitalWrite(7,HIGH);
+    digitalWrite(8,LOW);
+    digitalWrite(9,HIGH);
+  }
+
+  void right(){ 
+    digitalWrite(6,HIGH);
+    digitalWrite(7,LOW);// function for right direction
+    digitalWrite(8,LOW);
+    digitalWrite(9,HIGH);
+  }
+
+  void left(){ 
+    digitalWrite(6,LOW);// function for left direction
+    digitalWrite(7,HIGH);
+    digitalWrite(8,HIGH);
+    digitalWrite(9,LOW);
+  }
+
+  
+
+  void stop_car(){  
+    digitalWrite(6,LOW);//function to stop the car
+    digitalWrite(7,LOW);
+    digitalWrite(8,LOW);
+    digitalWrite(9,LOW);
+  }
+
+  void left_led(){
+    digitalWrite(12,HIGH);
+    delay(1500);
+    digitalWrite(12,LOW);
+  }
+
+  void right_led(){
+    digitalWrite(13,HIGH);
+    delay(1500);
+    digitalWrite(13,LOW);
+  }
